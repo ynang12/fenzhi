@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Municipal IoT Validation App</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .section { margin: 30px 0; padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
+        h1, h2 { color: #333; }
+        button { background-color: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; margin: 5px; }
+        button:hover { background-color: #0056b3; }
+        input, textarea { width: 100%; padding: 8px; margin: 5px 0; box-sizing: border-box; }
+        .response { background-color: #f8f9fa; padding: 15px; border-left: 4px solid #007bff; margin: 10px 0; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Municipal IoT Validation App</h1>
+
+    <div class="section">
+        <h2>设备管理 API 测试</h2>
+        <button onclick="getAllDevices()">获取所有设备</button>
+        <button onclick="createDevice()">创建测试设备</button>
+        <div id="deviceResponse" class="response"></div>
+    </div>
+
+    <div class="section">
+        <h2>传感器日志 API 测试</h2>
+        <button onclick="getAllSensorLogs()">获取所有传感器日志</button>
+        <button onclick="createSensorLog()">创建测试日志</button>
+        <div id="sensorResponse" class="response"></div>
+    </div>
+</div>
+
+<script>
+    const baseUrl = '/validation-app/api';
+
+    function getAllDevices() {
+        fetch(`${baseUrl}/devices`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('deviceResponse').innerHTML =
+                    '<h3>设备列表:</h3><pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            })
+            .catch(error => {
+                document.getElementById('deviceResponse').innerHTML =
+                    '<h3>错误:</h3><pre>' + error.message + '</pre>';
+            });
+    }
+
+    function createDevice() {
+        const device = {
+            deviceName: "测试设备-" + Date.now(),
+            deviceType: "TemperatureSensor",
+            location: "Building A",
+            status: "Active"
+        };
+
+        fetch(`${baseUrl}/devices`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(device)
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('deviceResponse').innerHTML =
+                '<h3>创建的设备:</h3><pre>' + JSON.stringify(data, null, 2) + '</pre>';
+        })
+        .catch(error => {
+            document.getElementById('deviceResponse').innerHTML =
+                '<h3>错误:</h3><pre>' + error.message + '</pre>';
+        });
+    }
+
+    function getAllSensorLogs() {
+        fetch(`${baseUrl}/sensor-logs`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('sensorResponse').innerHTML =
+                    '<h3>传感器日志:</h3><pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            })
+            .catch(error => {
+                document.getElementById('sensorResponse').innerHTML =
+                    '<h3>错误:</h3><pre>' + error.message + '</pre>';
+            });
+    }
+
+    function createSensorLog() {
+        const log = {
+            deviceId: "DEV001",
+            timestamp: new Date().toISOString(),
+            dataValue: Math.random() * 100,
+            unit: "°C",
+            extraInfo: {
+                "location": "Room 101",
+                "battery": "85%"
+            }
+        };
+
+        fetch(`${baseUrl}/sensor-logs`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(log)
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('sensorResponse').innerHTML =
+                '<h3>创建的日志:</h3><pre>' + JSON.stringify(data, null, 2) + '</pre>';
+        })
+        .catch(error => {
+            document.getElementById('sensorResponse').innerHTML =
+                '<h3>错误:</h3><pre>' + error.message + '</pre>';
+        });
+    }
+</script>
+</body>
+</html>
