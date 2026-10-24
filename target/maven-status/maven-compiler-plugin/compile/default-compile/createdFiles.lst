@@ -1,0 +1,9 @@
+com\municipal\iot\config\ApplicationConfig.class
+com\municipal\iot\resource\SensorResource.class
+com\municipal\iot\dao\DeviceDAO.class
+com\municipal\iot\dao\SensorDAO.class
+com\municipal\iot\entity\Device.class
+com\municipal\iot\dao\DeviceDAO$PreparedStatementSetter.class
+com\municipal\iot\entity\SensorReading.class
+com\municipal\iot\MongoTest.class
+com\municipal\iot\resource\DeviceResource.class
